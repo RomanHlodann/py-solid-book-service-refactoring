@@ -1,19 +1,26 @@
-from app.display_book import BookDisplayer
+from abc import ABC, abstractmethod
+
+from app.book import Book
+from app.display_book import Displayer
 
 
-class BookPrinter(BookDisplayer):
-    def display(self, print_type: str) -> None:
-        if print_type == "console":
-            return self.display_in_console()
-        elif print_type == "reverse":
-            return self.display_in_reverse()
-        else:
-            raise ValueError(f"Unknown print type: {print_type}")
+class Printer(ABC):
+    @abstractmethod
+    def print(self) -> None:
+        pass
 
-    def display_in_console(self):
+
+class BookConsolePrinter(Printer):
+    def __init__(self, book: Book, displayer: Displayer) -> None:
+        self.book = book
+        self.displayer = displayer
+
+    def print(self) -> None:
         print(f"Printing the book: {self.book.title}...")
-        super().display_in_console()
+        self.displayer.display()
 
-    def display_in_reverse(self):
+
+class BookReversePrinter(BookConsolePrinter):
+    def print(self) -> None:
         print(f"Printing the book in reverse: {self.book.title}...")
-        super().display_in_reverse()
+        self.displayer.display()

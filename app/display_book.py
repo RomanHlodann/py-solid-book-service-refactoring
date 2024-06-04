@@ -1,19 +1,24 @@
 from app.book import Book
+from abc import ABC, abstractmethod
 
 
-class BookDisplayer:
-    def __init__(self, book: Book):
+class Displayer(ABC):
+    @abstractmethod
+    def display(self) -> None:
+        pass
+
+
+class BookConsoleDisplayer(Displayer):
+    def __init__(self, book: Book) -> None:
         self.book = book
 
-    def display(self, display_type: str):
-        if display_type == "console":
-            return self.display_in_console()
-        elif display_type == "reverse":
-            return self.display_in_reverse()
-        raise ValueError(f"Unknown display type: {display_type}")
-
-    def display_in_console(self):
+    def display(self) -> None:
         print(self.book.content)
 
-    def display_in_reverse(self):
+
+class BookReverseDisplayer(Displayer):
+    def __init__(self, book: Book) -> None:
+        self.book = book
+
+    def display(self) -> None:
         print(self.book.content[::-1])
